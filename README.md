@@ -13,5 +13,5 @@ It is made in a generic way just copy the url u want to scrap ex (https://ruisil
 		- generic param point to the desired page
 
 TODO:
-	- Convert data.json to .csv
-		- try to fin dsome lib to convert it otherwise write one
+- Convert data.json to .csv
+	- try to fin dsome lib to convert it otherwise write one
