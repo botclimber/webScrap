@@ -8,12 +8,13 @@ use:
 ```
 scrapy crawl spy -O ../data/data.json -a url=https://ruisilauto.standvirtual.com/shop/?fbclid=IwAR27DajBHVEurxsXUb_JuR95As8EoJ6pADjnZ1tA-xGobouMq1UxCt1txI4
 ```
-	- **-O** param:
-		- replace existing file 
-	- **-o** param:
-		- append to existing file
-	- **-a url= (...)**:
-		- generic param point to the desired page
+
+- **-O** param:
+	- replace existing file 
+- **-o** param:
+	- append to existing file
+- **-a url= (...)**:
+	- generic param point to the desired page
 
 in this case it will only get title, price and link to detail page
 
