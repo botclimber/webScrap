@@ -25,9 +25,9 @@ class SpyA(scrapy.Spider):
 			links =  x.css(data['link']).get()
 				
 			yield {
-				'desc': x.css(data['desc']).get().strip(),
-				'price': x.css(data['price']).get().strip(),
-				'links': links
+				'title': x.css(data['desc']).get().strip(),
+				'price': float(x.css(data['price']).get().strip().replace(',', '.')),
+				'link': links
 			}
 			
 		r2 = response.css('li.next')

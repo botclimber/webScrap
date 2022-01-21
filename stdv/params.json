@@ -2,6 +2,6 @@
 	"params": {
 		"link": "a.offer-title__link::attr(href)",
 		"price": "span.offer-price__number::text",
-		"desc": "a.offer-title__link::text"
+		"title": "a.offer-title__link::text"
 	}
 }
