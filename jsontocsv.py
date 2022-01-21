@@ -1,16 +1,25 @@
 import json
 import csv
 
-f = open('stdv/data.json','r')
-x = json.loads(f.read())
+class jsontocsv:
+	read_from = '../data/data.json'	
+	write_in = '../data/data.csv' 	
 
-f = csv.writer(open("data.csv", "w", newline=''))
+	def __init__(self):
+			
+		f = open(read_from, 'r')
+		self.x = json.loads(f.read())
 
-# Write CSV Header, If you dont need that, remove this line
-f.writerow(["desc", "price", "link"])
+	def convert(self):
+		
+		f = csv.writer(open(write_in ,"w", newline=''))
 
-for x in x:
-	f.writerow([
-		x['desc'],
-		x['price'],
-		x['link']])
+		# Write CSV Header, If you dont need that, remove this line
+		f.writerow(["title", "price", "link"])
+
+		for x in x:
+			f.writerow([
+				x['title'],
+				x['price'],
+				x['link']])
+

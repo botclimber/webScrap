@@ -1,7 +1,6 @@
 import scrapy
 import json
 
-
 class SpyA(scrapy.Spider):
 	name = "spy"
 	
@@ -25,7 +24,7 @@ class SpyA(scrapy.Spider):
 			links =  x.css(data['link']).get()
 				
 			yield {
-				'title': x.css(data['desc']).get().strip(),
+				'title': x.css(data['title']).get().strip(),
 				'price': float(x.css(data['price']).get().strip().replace(',', '.')),
 				'link': links
 			}
