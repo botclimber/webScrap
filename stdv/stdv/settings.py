@@ -12,6 +12,7 @@ BOT_NAME = 'stdv'
 SPIDER_MODULES = ['stdv.spiders']
 NEWSPIDER_MODULE = 'stdv.spiders'
 
+FEED_EXPORT_ENCODING = 'utf-8'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36'

@@ -22,4 +22,9 @@ in this case it will only get title, price and link to detail page
 TODO:
 - Convert data.json to .csv
 	- try to fin dsome lib to convert it otherwise write one [x]
-	- create lib/package for jsontocsv func []
+	- extract detailed info from title param, atleast brand and year[x]
+	- make generic params def jsontocsv [x]
+	
+	- create lib/package for jsontocsv func [ ]
+	- for prod purpose erase 3 pages limitation [ ]
+	

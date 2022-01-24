@@ -7,20 +7,22 @@ class jsontocsv:
 	def __init__(self, file):
 			
 		f = open(file, 'r')
-		self.x = json.loads(f.read())
-
+		
+		self.data = json.loads(f.read())
+		self.params = [x for x in self.data[0]]
+		
+		f.close
+		
 	def convert(self):
 		
-		f = csv.writer(open('data.csv',"w", newline=''))
+		f = csv.writer(open('data.csv',"w", encoding="utf-8", newline=''))
 
-		# Write CSV Header, If you dont need that, remove this line
-		f.writerow(["title", "price", "link"])
+		f.writerow(self.params)
+		
+		for x in self.data:
+			content = [x[y] for y in self.params]			
+			f.writerow(content)
 
-		for x in self.x:
-			f.writerow([
-				x['title'],
-				x['price'],
-				x['link']])
 
 if __name__ == "__main__":
 	x = jsontocsv(sys.argv[1])
