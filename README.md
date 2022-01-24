@@ -6,7 +6,6 @@ it generates a .json and .csv file with the desired data.
 edit params.json file to change requested data.
 
 Installation:
-to use this application just install the requirements
 
 ```
 pip3 install -r requirementes.txt
