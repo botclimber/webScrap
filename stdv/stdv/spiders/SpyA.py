@@ -17,7 +17,7 @@ class SpyA(scrapy.Spider):
 		
 		brands = []
 		for x in text_file.readlines():
-			brands.append(x.replace('\n',''))
+			brands.append(x.lower().replace('\n',''))
 		
 		text_file.close()
 
@@ -33,9 +33,10 @@ class SpyA(scrapy.Spider):
 
 	def __extract(self, data):
 		
+		dataBrand = data.lower() # with this we only parse the string to lower once
 		brand = 'Not found'	
 		for x in self.brands:
-			if x in data:
+			if x in dataBrand:
 				brand = x
 				break
 		
