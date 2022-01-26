@@ -27,7 +27,7 @@ Lotus
 Maserati
 Mazda
 McLaren
-Mercedes-Benz
+Mercedes
 MG
 Mini
 Mitsubishi
@@ -48,3 +48,4 @@ Toyota
 Volkswagen
 Vw
 Volvo
+Saab

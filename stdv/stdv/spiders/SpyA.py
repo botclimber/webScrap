@@ -5,12 +5,20 @@ import re
 class SpyA(scrapy.Spider):
 	name = "spy"
 	
-	def __init__(self, url = None, *args, **kwargs):
+	def __init__(self, *args, **kwargs):
 		super(SpyA, self).__init__(*args, **kwargs)
-		self.start_urls = [f'{url}']
-					
+		
+		self.start_urls = self.__urls()
 		self.brands = self.__extractBrands()		
 
+
+	def __urls(self):
+
+		urls_file = open('sites_test.txt', 'r')
+		urls = [x for x in urls_file.readlines()]
+		urls_file.close()	
+	
+		return urls
 
 	def __extractBrands(self):
 		text_file = open('marcas.txt', 'r')
@@ -40,11 +48,17 @@ class SpyA(scrapy.Spider):
 				brand = x
 				break
 		
-		year = re.search("\[[0-9]+_[0-9]+", data)
+		yearM1 = re.search("\[[0-9]+_[0-9]+", data)
+		yearM2 = re.search("[0-9]{4} a [0-9]{1,4}", data)
 
-		if year:
-			year = year.group().replace('[','')
+		if yearM1:
+			year = yearM1.group().replace('[','')
 			year = year.split('_')
+		
+		elif yearM2:
+			year = yearM2.group().replace('a','')
+			year = year.split()	
+		
 		else:
 			year = [None, None]		
 
