@@ -38,7 +38,7 @@ class SpyA(scrapy.Spider):
 			if x in data:
 				brand = x
 				break
-		
+
 		year = re.search("\[[0-9]+_[0-9]+", data)
 
 		if year:
