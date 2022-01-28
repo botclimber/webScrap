@@ -5,21 +5,12 @@ import re
 class SpyA(scrapy.Spider):
 	name = "spy"
 	
-	def __init__(self, *args, **kwargs):
+	def __init__(self, url = None, *args, **kwargs):
 		super(SpyA, self).__init__(*args, **kwargs)
 		
 		#self.start_urls = self.__urls()
-		self.start_urls = ["https://ruisilauto.standvirtual.com/"]
+		self.start_urls = [f"{url}"]
 		self.brands = self.__extractBrands()		
-
-	
-	def __urls(self):
-
-		urls_file = open('sites_test.txt', 'r')
-		urls = [x for x in urls_file.readlines()]
-		urls_file.close()	
-	
-		return urls
 
 	def __extractBrands(self):
 		text_file = open('marcas.txt', 'r')
@@ -33,12 +24,12 @@ class SpyA(scrapy.Spider):
 		return brands
 
 
-	def __jHandler(self): 
+	def __jHandler(self, content): 
 
 		f = open('params.json', 'r') 
 		data = json.loads(f.read()) 
 
-		return data['params']
+		return data[content]
 
 	def __extract(self, data):
 		
@@ -65,33 +56,75 @@ class SpyA(scrapy.Spider):
 
 		return data, brand, year
 			
+
+
+
 	
 	def parse(self, response):
-		data = self.__jHandler()	
+		# verify wich funciont to call
+		web1 = response.css('div.offer-item__content')
+		web2 = response.css("ul.ooa-14gnkj3")
 
-		links = response.css('div.ooa-t4nnij a::attr(href)').getall()	
-		titles = response.css('div.ooa-1856yh h3::text').getall()
-		price = response.css('div.ooa-uw5svp p::text').getall()
-		price = [x for x in price[::2]]
-
-		for x in range(len(title)):
+		if web2 is not None: 
+			print('crawling website2')
+			data = self.__jHandler('website2')	
 			
-			title, brand, year = self.__extract(titles[x])		
-			
-			yield {
-				'title': title,
-				'brand': brand,
-				'price': float(price[x].replace(',', '.').replace(' ','.')),
-				'start_year': year[0],
-				'end_year': year[1],
-				'link': links[x]
-			}
-			
-		r2 = response.css('li.next')
-		nPageUrl = r2.css('a::attr("href")').get()
+			links = response.css('div.ooa-t4nnij a::attr(href)').getall()	
+			titles = response.css('div.ooa-1856yh h3::text').getall()
+			price = response.css('div.ooa-uw5svp p::text').getall()
+			price = [x for x in price[::2]]
 		
-		if nPageUrl is not None:
-			yield response.follow(nPageUrl, self.parse)
+			for x in range(len(titles)):
+				
+				title, brand, year = self.__extract(titles[x])		
+				
+				yield {
+					'title': title,
+					'brand': brand,
+					'price': price[x].strip(),
+					'start_year': year[0],
+					'end_year': year[1],
+					'link': links[x]
+				}
+				
+			r2 = response.css('li.pagination-item__active')
+			nPageUrl = r2.css('a::attr("href")').get()
+				
+			print(nPageUrl)	
+			if nPageUrl is not None and nPageUrl != '/':
+				nPageUrl = nPageUrl.replace(nPageUrl[-1], str(int(nPageUrl[-1])+1))
+				yield response.follow(nPageUrl, self.parse)
+			
+			elif nPageUrl == '/':
+				nPageUrl = response.request.url+'?page=2'
+				yield response.follow(nPageUrl, self.parse)
+							
 
+		elif web1 is not None:	
+			print('crawling website1')
+			data = self.__jHandler('website1')    
+
+			for x in r1: 
+
+				links =  x.css(data['link']).get()
+				title, brand, year = self.__extract(x.css(data['title']).get().strip())    
+
+				yield {
+					'title': title,
+					'brand': brand,
+					'price': x.css(data['price']).get().strip(),
+					'start_year': year[0],
+					'end_year': year[1],
+					'link': links
+				}   
+
+			r2 = response.css('li.next')
+			nPageUrl = r2.css('a::attr("href")').get()
+
+			if nPageUrl is not None:
+				yield response.follow(nPageUrl, self.parse)
+		
+		else:
+			print('No match')			
 
 

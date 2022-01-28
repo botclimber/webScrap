@@ -3,3 +3,4 @@ data/
 sandbox/
 *.csv
 *.pyc
+*.swp
