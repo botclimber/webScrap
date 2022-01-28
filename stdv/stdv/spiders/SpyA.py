@@ -8,10 +8,11 @@ class SpyA(scrapy.Spider):
 	def __init__(self, *args, **kwargs):
 		super(SpyA, self).__init__(*args, **kwargs)
 		
-		self.start_urls = self.__urls()
+		#self.start_urls = self.__urls()
+		self.start_urls = ["https://ruisilauto.standvirtual.com/"]
 		self.brands = self.__extractBrands()		
 
-
+	
 	def __urls(self):
 
 		urls_file = open('sites_test.txt', 'r')
@@ -67,28 +68,29 @@ class SpyA(scrapy.Spider):
 	
 	def parse(self, response):
 		data = self.__jHandler()	
-	
-		r1 = response.css('div.offer-item__content')
-		for x in r1:
+
+		links = response.css('div.ooa-t4nnij a::attr(href)').getall()	
+		titles = response.css('div.ooa-1856yh h3::text').getall()
+		price = response.css('div.ooa-uw5svp p::text').getall()
+		price = [x for x in price[::2]]
+
+		for x in range(len(title)):
 			
-			links =  x.css(data['link']).get()
-			title, brand, year = self.__extract(x.css(data['title']).get().strip())		
+			title, brand, year = self.__extract(titles[x])		
 			
 			yield {
 				'title': title,
 				'brand': brand,
-				'price': float(x.css(data['price']).get().strip().replace(',', '.').replace(' ','.')),
+				'price': float(price[x].replace(',', '.').replace(' ','.')),
 				'start_year': year[0],
 				'end_year': year[1],
-				'link': links
+				'link': links[x]
 			}
 			
 		r2 = response.css('li.next')
-		
 		nPageUrl = r2.css('a::attr("href")').get()
-		nPageNr = int(nPageUrl[-1])
 		
-		if nPageUrl is not None and nPageNr < 5:
+		if nPageUrl is not None:
 			yield response.follow(nPageUrl, self.parse)
 
 

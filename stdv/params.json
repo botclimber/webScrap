@@ -1,7 +1,7 @@
 {
 	"params": {
-		"link": "a.offer-title__link::attr(href)",
-		"price": "span.offer-price__number::text",
-		"title": "a.offer-title__link::text"
+		"link": "div.ooa-t4nnij a::attr(href)",
+		"price": "div.ooa-uw5svp p::text",
+		"title": "div.ooa-1856yh h3::text"
 	}
 }
