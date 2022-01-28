@@ -8,11 +8,16 @@ class SpyA(scrapy.Spider):
 	def __init__(self, url = None, *args, **kwargs):
 		super(SpyA, self).__init__(*args, **kwargs)
 		
-		#self.start_urls = self.__urls()
+		print(url)
 		self.start_urls = [f"{url}"]
 		self.brands = self.__extractBrands()		
 
+	
 	def __extractBrands(self):
+		'''
+		Get all brands from file clean data and transform it
+
+		'''
 		text_file = open('marcas.txt', 'r')
 		
 		brands = []
@@ -25,14 +30,21 @@ class SpyA(scrapy.Spider):
 
 
 	def __jHandler(self, content): 
+		'''
 
+		get defined params from file, these params are the tags/data that fetch the html DOM
+		'''
 		f = open('params.json', 'r') 
 		data = json.loads(f.read()) 
 
 		return data[content]
 
 	def __extract(self, data):
-		
+		'''
+			
+		extract detailed data from title, brand/year
+		'''
+
 		dataBrand = data.lower() # with this we only parse the string to lower once
 		brand = 'Not found'	
 		for x in self.brands:
@@ -55,9 +67,6 @@ class SpyA(scrapy.Spider):
 			year = [None, None]		
 
 		return data, brand, year
-			
-
-
 
 	
 	def parse(self, response):
@@ -90,9 +99,9 @@ class SpyA(scrapy.Spider):
 			r2 = response.css('li.pagination-item__active')
 			nPageUrl = r2.css('a::attr("href")').get()
 				
-			print(nPageUrl)	
 			if nPageUrl is not None and nPageUrl != '/':
-				nPageUrl = nPageUrl.replace(nPageUrl[-1], str(int(nPageUrl[-1])+1))
+				page = nPageUrl.split('=')[1]
+				nPageUrl = nPageUrl.replace(page, str(int(page)+1))
 				yield response.follow(nPageUrl, self.parse)
 			
 			elif nPageUrl == '/':
@@ -112,7 +121,7 @@ class SpyA(scrapy.Spider):
 				yield {
 					'title': title,
 					'brand': brand,
-					'price': x.css(data['price']).get().strip(),
+					'price': float(x.css(data['price']).get().replace(' ','')),
 					'start_year': year[0],
 					'end_year': year[1],
 					'link': links
