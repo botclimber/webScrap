@@ -76,6 +76,7 @@ class SpyA(scrapy.Spider):
 
 		if web2 is not None: 
 			print('crawling website2')
+			company = response.css("h1.ooa-tbb56z-Text::text").get()
 			data = self.__jHandler('website2')	
 			
 			links = response.css('div.ooa-t4nnij a::attr(href)').getall()	
@@ -88,6 +89,7 @@ class SpyA(scrapy.Spider):
 				title, brand, year = self.__extract(titles[x])		
 				
 				yield {
+					'company': company,
 					'title': title,
 					'brand': brand,
 					'price': price[x].strip(),
